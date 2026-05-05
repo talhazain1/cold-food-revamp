@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --r2c-white: #ffffff;
+  --r2c-red: #c8102e;
+  --r2c-green: #006847;
+}
+
+body {
+  background: var(--r2c-white);
+  color: #111827;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
