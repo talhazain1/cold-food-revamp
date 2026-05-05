@@ -20,9 +20,24 @@ Production-ready Next.js 14 e-commerce platform for `ready2cook.co.uk`.
    npm run dev
    ```
 
+## Git: staging vs production
+
+- **`staging`**: Push here first for pre-production verification. GitHub Actions deploys to `/var/www/ready2cook-staging` and restarts PM2 app `ready2cook-staging`.
+- **`main`**: Production. Pushes deploy to `/var/www/ready2cook` and restart PM2 app `ready2cook`.
+
+On the VPS, clone the repo twice (or use two directories), configure Nginx/PM2 for each path, then set secrets below.
+
 ## Required GitHub Secrets For Deployment
 
 Add all values in GitHub: Settings -> Secrets -> Actions.
+
+**Staging (CI build + optional separate DB / auth URL):**
+
+- `STAGING_DATABASE_URL`
+- `STAGING_NEXTAUTH_SECRET`
+- `STAGING_NEXTAUTH_URL` (e.g. `https://staging.ready2cook.co.uk`)
+
+**Production / shared SSH:**
 
 - `VPS_HOST`
 - `VPS_USER`
