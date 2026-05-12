@@ -31,6 +31,7 @@ model Product {
   price       Float
   images      String[]
   category    String
+  tags        String[]    @default([])
   stock       Int         @default(0)
   isActive    Boolean     @default(true)
   orderItems  OrderItem[]
@@ -42,11 +43,17 @@ model Bundle {
   id          String   @id @default(cuid())
   name        String
   description String
-  discount    Float
+  /// Bundle selling price in GBP (what the customer pays for the bundle).
+  price       Float    @default(0)
+  /// Optional legacy percentage field; prefer `price` for new bundles.
+  discount    Float    @default(0)
+  /// Product IDs included in this bundle (`Product.id`).
   products    String[]
+  terms       String   @default("")
   isActive    Boolean  @default(true)
   expiresAt   DateTime?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Order {

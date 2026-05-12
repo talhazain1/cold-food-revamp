@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ready2cook
+      POSTGRES_PASSWORD: ready2cook
+      POSTGRES_DB: ready2cook
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ready2cook -d ready2cook"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    # Default 3001 so this does not clash with `next dev` on 3000. Override: HOST_PORT=3000 docker compose up
+    ports:
+      - "${HOST_PORT:-3001}:3000"
+    env_file:
+      - docker-compose.env
+    environment:
+      # Overrides `docker-compose.env` / `.env` so the app uses the Postgres service.
+      DATABASE_URL: postgresql://ready2cook:ready2cook@db:5432/ready2cook
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

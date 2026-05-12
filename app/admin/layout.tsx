@@ -7,7 +7,8 @@ import { prisma } from "@/lib/prisma";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
-  if (!session?.user || session.user.role !== Role.ADMIN) redirect("/");
+  if (!session?.user) redirect("/auth/login?callbackUrl=/admin");
+  if (session.user.role !== Role.ADMIN) redirect("/");
   const pendingCount = await prisma.order.count({ where: { status: "PENDING" } });
   return (
     <div className="flex min-h-[70vh]">

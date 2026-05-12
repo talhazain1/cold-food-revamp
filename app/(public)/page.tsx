@@ -1,15 +1,12 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import LandingContent from "@/components/LandingContent";
+
+export const metadata: Metadata = {
+  title: "Ready2Cook | Premium meal kits delivered across the UK",
+  description:
+    "Restaurant-quality meal kits and pantry staples — fresh ingredients, clear recipes, and reliable UK delivery from Ready2Cook.",
+};
 
 export default function HomePage() {
-  return (
-    <section className="space-y-6">
-      <h1 className="text-4xl font-bold text-[#C8102E]">Fresh meal kits from Ready2Cook</h1>
-      <p className="max-w-2xl text-lg text-gray-700">
-        Discover premium ready-to-cook meals and pantry staples delivered across the UK.
-      </p>
-      <Link href="/products" className="inline-block rounded bg-[#C8102E] px-6 py-3 text-white">
-        Shop Products
-      </Link>
-    </section>
-  );
+  return <LandingContent />;
 }

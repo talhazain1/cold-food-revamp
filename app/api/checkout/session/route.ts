@@ -30,11 +30,14 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 422 });
 
   const settings = await prisma.deliverySettings.findFirst();
-  const deliveryCost =
+  const windowRate =
     parsed.data.deliveryWindow === DeliveryWindow.UNDER_48H
       ? settings?.under48h ?? 3.5
       : settings?.between48and72h ?? 2.5;
   const subtotal = parsed.data.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const freeThreshold = settings?.freeOver ?? null;
+  const qualifiesFree = freeThreshold != null && freeThreshold > 0 && subtotal >= freeThreshold;
+  const deliveryCost = qualifiesFree ? 0 : windowRate;
   const total = subtotal + deliveryCost;
 
   const address = await prisma.address.create({

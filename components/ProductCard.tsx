@@ -23,6 +23,18 @@ export default function ProductCard({ product }: { product: Product }) {
         <h3 className="font-semibold">{product.name}</h3>
         {stockBadge(product.stock)}
       </div>
+      {product.tags?.length ? (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {product.tags.map((tag) => (
+            <span
+              key={`${product.id}-${tag}`}
+              className="rounded-full border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-neutral-600"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      ) : null}
       <p className="mt-2 text-[#C8102E] font-bold">£{product.price.toFixed(2)}</p>
       <button
         type="button"

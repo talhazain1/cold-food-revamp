@@ -6,6 +6,17 @@
   --r2c-green: #006847;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (min-width: 1024px) {
+  html {
+    scroll-padding-top: 6rem;
+  }
+}
+
 body {
   background: var(--r2c-white);
   color: #111827;

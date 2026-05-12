@@ -1,22 +1,31 @@
+import AdminOrdersPanel, { type AdminOrderDetail } from "@/components/admin/AdminOrdersPanel";
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminOrdersPage() {
   const orders = await prisma.order.findMany({
-    include: { user: true, items: { include: { product: true } } },
+    include: {
+      user: { select: { id: true, name: true, email: true } },
+      address: true,
+      items: {
+        include: {
+          product: { select: { id: true, name: true } },
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
+  const serialised = JSON.parse(JSON.stringify(orders)) as AdminOrderDetail[];
+
   return (
-    <section className="space-y-4">
-      <h1 className="text-2xl font-bold">Orders</h1>
-      {orders.map((order: { id: string; total: number; deliveryWindow: string; status: string; user: { name: string; email: string }; items: { product: { name: string }; quantity: number }[] }) => (
-        <div key={order.id} className="rounded border p-3">
-          <p>
-            {order.id} - {order.user.name} ({order.user.email}) - £{order.total.toFixed(2)}
-          </p>
-          <p>Delivery: {order.deliveryWindow} | Status: {order.status}</p>
-          <p>Items: {order.items.map((item: { product: { name: string }; quantity: number }) => `${item.product.name} x${item.quantity}`).join(", ")}</p>
-        </div>
-      ))}
+    <section className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-neutral-950">Orders</h1>
+        <p className="mt-2 max-w-3xl text-sm text-neutral-600">
+          New captures haven&apos;t cleared Stripe yet; in-progress orders are paid but still moving through your fulfilment
+          states. Update statuses as you pack and hand off to couriers.
+        </p>
+      </div>
+      <AdminOrdersPanel orders={serialised} />
     </section>
   );
 }
