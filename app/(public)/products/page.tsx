@@ -1,5 +1,6 @@
 import ProductCard from "@/components/ProductCard";
 import { prisma } from "@/lib/prisma";
+import type { Product } from "@prisma/client";
 
 export default async function ProductsPage({
   searchParams,
@@ -37,7 +38,7 @@ export default async function ProductsPage({
         </button>
       </form>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product: { id: string; name: string; slug: string; description: string; price: number; images: string[]; category: string; stock: number; isActive: boolean; createdAt: Date; updatedAt: Date }) => (
+        {products.map((product: Product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

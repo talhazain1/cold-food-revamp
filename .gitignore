@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# local GitHub Actions deploy keys (never commit)
+github_deploy_ed25519
+github_deploy_ed25519.pub
+
 # debug
 npm-debug.log*
 yarn-debug.log*

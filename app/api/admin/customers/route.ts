@@ -7,7 +7,21 @@ export async function GET() {
   if (!admin.ok) return admin.response;
   const customers = await prisma.user.findMany({
     where: { role: "CUSTOMER" },
-    include: { orders: true },
+    include: {
+      addresses: true,
+      orders: {
+        include: {
+          address: true,
+          items: {
+            include: {
+              product: { select: { name: true } },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+    orderBy: { createdAt: "desc" },
   });
   return NextResponse.json(customers);
 }
