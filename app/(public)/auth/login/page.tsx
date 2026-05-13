@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -42,6 +43,12 @@ export default function LoginPage() {
       <button type="button" className="w-full rounded border border-[#006847] py-2 text-[#006847]" onClick={() => signIn("facebook", { callbackUrl })}>
         Continue with Facebook
       </button>
+      <p className="text-center text-sm text-slate-600">
+        New here?{" "}
+        <Link href="/auth/signup" className="font-medium text-[#006847] underline-offset-2 hover:underline">
+          Sign up
+        </Link>
+      </p>
     </form>
   );
 }
