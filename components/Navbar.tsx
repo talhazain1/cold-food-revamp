@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { Menu, ShoppingBag, ShoppingCart, X } from "lucide-react";
+import { Menu, ShoppingBag, ShoppingCart, UserCircle, X } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
 
 const LANDING_IDS = [
@@ -17,6 +18,7 @@ const LANDING_IDS = [
 
 export default function Navbar({ onOpenCart }: { onOpenCart: () => void }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const isHome = pathname === "/";
   const { items } = useCart();
   const count = items.reduce((sum, i) => sum + i.quantity, 0);
@@ -78,9 +80,11 @@ export default function Navbar({ onOpenCart }: { onOpenCart: () => void }) {
           </Link>
           <Link
             href="/account"
-            className="hidden rounded-lg px-3 py-2 text-sm font-medium text-[#334155] transition hover:bg-gray-100 hover:text-[#006847] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#006847] md:inline-block"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#006847]/22 bg-white text-[#006847] shadow-sm transition hover:border-[#006847]/35 hover:bg-[#006847]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#006847]"
+            aria-label={session?.user ? "My account" : "Account — sign in"}
+            title={session?.user ? "My account" : "Sign in for your account"}
           >
-            Account
+            <UserCircle className="h-[20px] w-[20px]" aria-hidden strokeWidth={2} />
           </Link>
           <button
             type="button"
@@ -135,10 +139,11 @@ export default function Navbar({ onOpenCart }: { onOpenCart: () => void }) {
               ))}
               <Link
                 href="/account"
-                className="rounded-xl px-3 py-2.5 text-sm font-medium text-[#334155] hover:bg-[#006847]/10 hover:text-[#006847]"
+                className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-[#334155] hover:bg-[#006847]/10 hover:text-[#006847]"
                 onClick={() => setMobileOpen(false)}
               >
-                Account
+                <UserCircle className="h-5 w-5 shrink-0 text-[#006847]" aria-hidden strokeWidth={2} />
+                {session?.user ? "My account" : "Account / sign in"}
               </Link>
             </div>
           </div>
